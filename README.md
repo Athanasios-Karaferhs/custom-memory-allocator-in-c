@@ -42,7 +42,7 @@ Needs `ncurses` installed.
 
 ## linux kernal devices(at least the ones I tested it :D,only ubuntu ):
 
-you can download ncurses with a basic ```sudo ... ncurses ``` command. 
+you can download ncurses with a basic ```sudo apt install -y libncurses-dev ``` command. 
 
 Then comp:
 
