@@ -1,4 +1,4 @@
-# Custom Memory Allocator (malloc/free/realloc from scratch)
+# Custom Memory Allocator (malloc/free/realloc from scratch on UNIX)
 
 A from-scratch reimplementation of `malloc`, `free`, and `realloc` in C, built to actually understand what the standard library is doing under the hood instead of just trusting it. Memory is requested from the OS with `sbrk`, and everything past that — tracking blocks, finding a free one to reuse, growing an allocation — is handled manually with an intrusive linked list.
 
@@ -43,9 +43,6 @@ Needs `ncurses` installed.
 ## linux kernal devices(at least the ones I tested it :D,only ubuntu ):
 
 you can download ncurses with a basic ```sudo ... ncurses ``` command. 
-
-## on window's: 
-open your ```MSYS2 terminal ```,then do ```pacman -Syu ```, then ```pacman -S mingw-w64-ucrt-x86_64-ncurses ```.
 
 Then comp:
 
