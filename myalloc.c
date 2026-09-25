@@ -22,12 +22,16 @@ void draw_heap(int start_row);
 
 int main()
 {
+
     initscr();
     start_color();
     init_pair(1, COLOR_GREEN, COLOR_BLACK); // used
     init_pair(2, COLOR_RED, COLOR_BLACK);   // free
     cbreak();                               // read input without enter
     echo();
+    // an array that will be malloced each time a new element gets added, it will consist of 1 and 0s where each one reprisents a true or false statement.By that
+    // we will print on the screen the numbers that can be freed or realloced.
+    // if I do free and then malloc back I into 3 memories I will get 0-5 which is wrong.
 
     int choice;
     void *p;
@@ -68,8 +72,8 @@ int main()
         }
         else if (choice == 2)
         {
-            mvprintw(8, 0, "                                ");
-            mvprintw(9, 0, "                                ");
+            mvprintw(8, 0, "                                            ");
+            mvprintw(9, 0, "                                            ");
 
             if (count == 0)
             {
@@ -79,27 +83,41 @@ int main()
             else
             {
                 int idx;
-                mvprintw(7, 0, "Which slot to free (0 to %d): ", count - 1);
+                mvprintw(7, 0, "Which slot to free (0 to %d):                 ", count - 1);
                 clrtoeol();
+                char freed_list[100] = "Already free: ";
+                int any_free = 0;
+                for (int i = 0; i < count; i++)
+                {
+                    if (ptrs[i] == NULL)
+                    {
+                        char num[16];
+                        snprintf(num, sizeof(num), "%d ", i);
+                        strcat(freed_list, num);
+                        any_free = 1;
+                    }
+                }
+                mvprintw(8, 0, "                                                                        ");
+                if (any_free)
+                    mvprintw(8, 0, "%s", freed_list);
+
                 refresh();
                 scanw("%d", &idx);
 
                 while (idx < 0 || idx >= count || ptrs[idx] == NULL)
                 {
-                    mvprintw(8, 0, "Invalid or already-freed slot.        ");
-                    mvprintw(7, 0, "Which slot to free (0 to %d): ", count - 1);
-                    clrtoeol();
+                    mvprintw(9, 0, "Invalid or already-freed slot,give a new slot        ");
                     refresh();
                     scanw("%d", &idx);
                 }
 
-                mvprintw(7, 0, "slot is free                      ");
-                mvprintw(8, 0, " ");
+                mvprintw(7, 0, "slot is free                                        ");
+                mvprintw(8, 0, "                                                    ");
+                mvprintw(9, 0, "                                                    ");
                 my_free(ptrs[idx]);
                 ptrs[idx] = NULL;
 
-                if (idx == count - 1)
-                    count--;
+                count--;
             }
         }
         else if (choice == 3)
