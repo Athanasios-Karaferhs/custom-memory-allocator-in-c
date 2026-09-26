@@ -39,6 +39,8 @@ int main()
     int capacity = 0;
     int count = 0;
     int i = 0;
+    int free_array[100]; // contains the freed
+    int sum_count = 0;
     while (1)
     {
         mvprintw(0, 0, "| OPTIONS |                              ");
@@ -63,12 +65,27 @@ int main()
             p = my_malloc(size);
             mvprintw(7, 0, "New pointer available: %p          ", p);
 
-            if (count == capacity)
+            int reused = 0;
+            // looking for free spots to reuse before adding a new one
+            for (int j = 0; j < count; j++)
             {
-                capacity = (capacity == 0) ? 4 : capacity * 2;
-                ptrs = realloc(ptrs, capacity * sizeof(void *));
+                if (ptrs[j] == NULL)
+                {
+                    ptrs[j] = p;
+                    reused = 1;
+                    break;
+                }
             }
-            ptrs[count++] = p;
+
+            if (!reused)
+            {
+                if (count == capacity)
+                {
+                    capacity = (capacity == 0) ? 4 : capacity * 2;
+                    ptrs = realloc(ptrs, capacity * sizeof(void *));
+                }
+                ptrs[count++] = p;
+            }
         }
         else if (choice == 2)
         {
@@ -97,6 +114,7 @@ int main()
                         any_free = 1;
                     }
                 }
+
                 mvprintw(8, 0, "                                                                        ");
                 if (any_free)
                     mvprintw(8, 0, "%s", freed_list);
@@ -116,8 +134,8 @@ int main()
                 mvprintw(9, 0, "                                                    ");
                 my_free(ptrs[idx]);
                 ptrs[idx] = NULL;
-
-                count--;
+                if (idx == count - 1)
+                    count--;
             }
         }
         else if (choice == 3)
