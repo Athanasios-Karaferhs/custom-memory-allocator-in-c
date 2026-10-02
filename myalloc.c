@@ -19,8 +19,9 @@ void my_free(void *ptr);
 void *my_malloc(size_t size);
 void *my_realloc(void *ptr, size_t new_size);
 void draw_heap(int start_row);
+char check_free_mem(void **ptrs, int count, char *freed_list)
 
-int main()
+    int main()
 {
 
     initscr();
@@ -129,8 +130,10 @@ int main()
                     scanw("%d", &idx);
                 }
 
+                if (idx == ptrs[count])
+                    mvprintw(8, 0, "%c", check_free_mem(ptrs, count, freed_list));
                 mvprintw(7, 0, "slot is free                                        ");
-                mvprintw(8, 0, "                                                    ");
+                // mvprintw(8, 0, "                                                    ");
                 mvprintw(9, 0, "                                                    ");
                 my_free(ptrs[idx]);
                 ptrs[idx] = NULL;
@@ -306,4 +309,24 @@ void draw_heap(int start_row)
         curr = curr->next;
         i++;
     }
+}
+
+char check_free_mem(void **ptrs, int count, char *freed_list)
+{
+    // keep in mind pts mind need to be past as ***, as it might not change the array on mem but a copy(prb thats what will happen)
+    // check_free_mem will return the last number(as char) and then print it on the (0-%c).By that freed_list must comee to 0.
+
+    // απο το τελος του πινακα πρεπει να εχω ενα δεν ισχυει μεχρις οτου να υπαρξει !=NULL
+    int notNull = 0;
+    int sum = 0;
+    for (int i = count; i > 0; i--)
+    {
+        if (ptrs[i] != NULL)
+            notNull = 1;
+        else
+            sum++;
+    }
+
+    if (notNull == 1)
+        return ptrs[count - sum - 1];
 }
